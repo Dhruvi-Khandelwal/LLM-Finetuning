@@ -1,0 +1,160 @@
+[build-system]
+requires = ["uv_build>=0.11.4"]
+build-backend = "uv_build"
+
+[project]
+name = "llm-finetuning"
+version = "0.1.0"
+description = 'Finetuning Large Language Models'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Ashwin Mathur", email = "" },
+  { name = "Varun Mathur", email = "" },
+]
+dependencies = [
+  "transformers",
+  "datasets",
+  "trl==0.25.1",
+  "bitsandbytes",
+  "peft",
+  "huggingface_hub",
+  "unsloth",
+  "unstructured",
+  "pymilvus",
+  "sentence-transformers",
+  "pyyaml",
+  "deepeval",
+  "evidently>=0.4",
+  "tenacity",
+  "tqdm",
+  "python-dotenv"
+]
+
+[project.urls]
+Documentation = "https://github.com/avnlp/llm-finetuning#readme"
+Issues = "https://github.com/avnlp/llm-finetuning/issues"
+Source = "https://github.com/avnlp/llm-finetuning"
+
+[dependency-groups]
+dev = [
+  "bandit>=1.9.4",
+  "mypy>=2.0.0",
+  "pip-audit>=2.10.0",
+  "pre-commit>=4.6.0",
+  "ruff>=0.16.6",
+  "typos>=1.50.1",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.mypy]
+follow_imports = "skip"
+ignore_missing_imports = false
+install_types = true
+pretty = true
+non_interactive = true
+allow_untyped_defs = false
+no_implicit_optional = true
+check_untyped_defs = true
+namespace_packages = true
+explicit_package_bases = true
+warn_unused_configs = true
+allow_subclassing_any = false
+allow_untyped_calls = false
+allow_incomplete_defs = false
+allow_untyped_decorators = false
+warn_redundant_casts = true
+warn_unused_ignores = false
+implicit_reexport = false
+strict_equality = true
+extra_checks = true
+mypy_path = "src"
+disable_error_code = ["operator", "untyped-decorator", "union-attr", "attr-defined", "misc"]
+
+[[tool.mypy.overrides]]
+module = [
+  "datasets",
+  "datasets.*",
+  "deepeval",
+  "deepeval.*",
+  "dotenv",
+  "sentence_transformers",
+  "sentence_transformers.*",
+  "fsspec",
+]
+ignore_missing_imports = true
+ignore_errors = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+include = ["*.py", "pyproject.toml", "*.ipynb"]
+exclude = ["_notes", "_other", "notes"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "COM", # flake8-commas
+  "C4",  # flake8-comprehensions
+  "RET", # flake8-return
+  "SIM", # flake8-simplify
+  "ICN", # flake8-import-conventions
+  "Q",   # flake8-quotes
+  "RSE", # flake8-raise
+  "D",   # pydocstyle
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "I",   # isort
+  "W",   # pycodestyle
+  "N",   # pep8-naming
+  "ERA", # eradicate
+  "PL",  # pylint
+]
+ignore = [
+  "B905",    # `zip()` without an explicit `strict=` parameter
+  "E501",    # line too long
+  "D203",    # 1 blank line required before class docstring
+  "D213",    # Multi-line docstring summary should start at the second line
+  "PLR2004", # Replace magic number with named constant
+  "PLR0913", # Too many arguments
+  "COM812",  # Missing trailing comma
+  "ERA001",  # Found commented-out code
+  "A001",    # Ignore variable `input` is shadowing a Python builtin
+  "A002",    # Ignore variable `input` is shadowing a Python builtin in function
+  "D301",    # r-strings for docstrings with backslashes
+  "PLC0415", # Allow inline imports for optional dependencies
+  "PLR0912", # Too many branches (in complex filter/interactive functions)
+  "PLR0915", # Too many statements (in complex interactive functions)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401", "F403", "F811"]
+"tests/*" = ["D103", "D105", "D107"]
+
+[tool.ruff.lint.pep8-naming]
+ignore-names = ["X*", "setUp"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["llm_finetuning"]
+lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 88
+
+
+[tool.bandit]
+exclude_dirs = ["/tests", "/.venv", "/build", "/dist"]
+skips = ["B101"]
